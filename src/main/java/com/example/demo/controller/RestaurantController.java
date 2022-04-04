@@ -26,7 +26,13 @@ public class RestaurantController {
 
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> add() {
+    public ResponseEntity<?> getCategories() {
         return new ResponseEntity<>(restaurantService.getCategories(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(restaurantService.getAll(), HttpStatus.OK);
     }
 }

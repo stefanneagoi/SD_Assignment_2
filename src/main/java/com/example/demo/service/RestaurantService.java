@@ -24,20 +24,23 @@ public class RestaurantService {
         this.adminRepository = adminRepository;
     }
 
-    public Restaurant add(RestaurantDTO restaurantDTO, Integer admin_id) {
+    public RestaurantDTO add(RestaurantDTO restaurantDTO, Integer admin_id) {
         Admin admin = adminRepository.findById(admin_id.longValue())
                 .orElseThrow(()-> new RuntimeException("Admin doesn't exist"));
+        if(admin.getRestaurant() != null)
+            throw new RuntimeException("Admin already has a restaurant");
         Restaurant restaurant = dtoToRestaurant(restaurantDTO);
         restaurant.setAdmin(admin);
         restaurantRepository.save(restaurant);
-        restaurant.getAdmin().setRestaurant(null);
-        return restaurant;
+        return restaurantDTO;
+    }
+
+    public List<Restaurant> getAll(){
+        return restaurantRepository.findAll();
     }
 
     public List<Categories> getCategories(){
         return Arrays.asList(Categories.values());
     }
-    private Restaurant dtoToRestaurant(RestaurantDTO dto){
-        return modelMapper.map(dto, Restaurant.class);
-    }
+    private Restaurant dtoToRestaurant(RestaurantDTO dto) { return modelMapper.map(dto, Restaurant.class); }
 }

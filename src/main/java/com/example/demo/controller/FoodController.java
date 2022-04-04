@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.models.dto.FoodDTO;
-import com.example.demo.service.AdminService;
 import com.example.demo.service.FoodService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class FoodController {
         return new ResponseEntity<>(foodService.delete(food_id.longValue()), HttpStatus.OK);
     }
 
-    @GetMapping("/foods/{admin_id}")
+    @GetMapping("/{admin_id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getFoods(@PathVariable Integer admin_id) {
         return new ResponseEntity<>(foodService.getFoods(admin_id.longValue()), HttpStatus.OK);

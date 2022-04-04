@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.models.dto.CustomerLoginDTO;
 import com.example.demo.models.dto.LoginDTO;
 import com.example.demo.models.dto.RegisterDTO;
 import com.example.demo.models.entities.Customer;
@@ -33,15 +34,13 @@ public class CustomerService {
         return customer;
     }
 
-    public Customer login(LoginDTO loginDTO) {
+    public CustomerLoginDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByUsername(loginDTO.getUsername())
                 .orElseThrow(() -> new RuntimeException("User Not Found with username:" + loginDTO.getUsername()));
         if(user.getCustomer() == null)
             throw new RuntimeException("User is not a customer!");
         if (BCrypt.checkpw(loginDTO.getPasswordDigest(), user.getPasswordDigest())) {
-            Customer customer = user.getCustomer();
-            customer.getUser().setCustomer(null);
-            return customer;
+            return customerToDto(user);
         }
         else
             throw new RuntimeException("Passwords don't match");
@@ -49,6 +48,13 @@ public class CustomerService {
 
     private User dtoToUser(RegisterDTO dto) {
         return modelMapper.map(dto, User.class);
+    }
+    private CustomerLoginDTO customerToDto(User user){
+        CustomerLoginDTO dto = new CustomerLoginDTO();
+        dto.setId(user.getId().intValue());
+        dto.setCustomerId(user.getCustomer().getId().intValue());
+        dto.setUsername(user.getUsername());
+        return dto;
     }
 
 }

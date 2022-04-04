@@ -1,6 +1,8 @@
 package com.example.demo.service;
+import com.example.demo.models.dto.AdminLoginDTO;
 import com.example.demo.models.dto.LoginDTO;
 import com.example.demo.models.dto.RegisterDTO;
+import com.example.demo.models.dto.RestaurantDTO;
 import com.example.demo.models.entities.Admin;
 import com.example.demo.models.entities.User;
 import com.example.demo.repository.AdminRepository;
@@ -32,15 +34,14 @@ public class AdminService {
         return admin;
     }
 
-    public Admin login(LoginDTO loginDTO) {
+    public AdminLoginDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByUsername(loginDTO.getUsername())
                 .orElseThrow(() -> new RuntimeException("User Not Found with username:" + loginDTO.getUsername()));
         if(user.getAdmin() == null)
             throw new RuntimeException("User is not an admin");
         if (BCrypt.checkpw(loginDTO.getPasswordDigest(), user.getPasswordDigest())) {
             Admin admin = user.getAdmin();
-            admin.getUser().setAdmin(null);
-            return admin;
+            return adminLoginDTO(admin);
         }
         else
             throw new RuntimeException("Passwords don't match");
@@ -58,4 +59,19 @@ public class AdminService {
     private User LoginDTOtoUser(LoginDTO dto) {
         return modelMapper.map(dto, User.class);
     }
+
+    private AdminLoginDTO adminLoginDTO(Admin admin) {
+        AdminLoginDTO dto = new AdminLoginDTO();
+        dto.setId(admin.getUser().getId().intValue());
+        dto.setAdminId(admin.getId().intValue());
+        dto.setUsername(admin.getUser().getUsername());
+        dto.setRestaurant(new RestaurantDTO());
+        if(admin.getRestaurant() != null) {
+            dto.getRestaurant().setLocation(admin.getRestaurant().getLocation());
+            dto.getRestaurant().setName(admin.getRestaurant().getName());
+            dto.getRestaurant().setDeliveryZones(admin.getRestaurant().getDeliveryZones());
+        }
+        return dto;
+    }
+
 }

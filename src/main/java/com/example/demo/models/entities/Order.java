@@ -2,7 +2,6 @@ package com.example.demo.models.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.util.Set;
 
@@ -32,5 +31,9 @@ public class Order {
 
     public Order(Customer customer) {
         this.customer = customer;
+    }
+
+    public void addFood(Food food) {
+        foods.add(food);
     }
 }

@@ -51,4 +51,5 @@ public class Food {
         this.category = category;
         this.restaurant = restaurant;
     }
+
 }

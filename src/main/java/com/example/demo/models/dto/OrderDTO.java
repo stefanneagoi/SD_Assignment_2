@@ -1,5 +1,13 @@
 package com.example.demo.models.dto;
-public class OrderDTO {
-    private String category;
 
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class OrderDTO {
+    private Integer orderId;
+    private Integer customerId;
+    private List<FoodDTO> foods;
+    private String status;
 }

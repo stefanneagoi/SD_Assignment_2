@@ -7,7 +7,6 @@ import com.example.demo.repository.UserRepository;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
 
     @Autowired

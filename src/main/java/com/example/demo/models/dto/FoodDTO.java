@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 @Setter
 @Data
 public class FoodDTO {
+    private Integer id;
+
     @NotNull
     @Size(min = 3, max = 20, message = "Must be between 3 and 20 characters!")
     private String name;
